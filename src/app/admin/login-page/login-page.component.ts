@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/common/auth.service';
+import { User } from 'src/app/common/models/user';
 
 @Component({
   selector: 'app-login-page',
@@ -6,5 +10,42 @@ import { Component } from '@angular/core';
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent {
+
+  form!:FormGroup;
+  submitted = false;
+
+  constructor(
+    public auth:AuthService,
+    private router: Router
+    ){}
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    });
+  }
+
+  submit(): void {
+    if(this.form.invalid) {
+      return;
+    }
+    this.submitted = true;
+
+    const user:User = {
+      email: this.form.value.email,
+      password: this.form.value.password
+    };
+
+    this.auth.login(user).subscribe(res =>{
+      this.form.reset;
+      this.router.navigate(['/admin','dashboard']);
+      this.submitted = false;
+    }, (res) => {
+      this.submitted = false;
+      console.log(res);
+    });
+
+  }
 
 }
