@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/common/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -7,4 +9,14 @@ import { Component } from '@angular/core';
 })
 export class AdminLayoutComponent {
 
+  constructor(
+    public auth: AuthService,
+    public router: Router
+    ) { }
+
+  loguot($event: Event) {
+    $event.preventDefault();
+    this.auth.logout();
+    this.router.navigate(['/admin', '/login']);
+  }
 }

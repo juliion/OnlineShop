@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/common/auth.service';
-import { User } from 'src/app/common/models/user';
+import { LoginRequest } from 'src/app/common/models/login-request';
 
 @Component({
   selector: 'app-login-page',
@@ -32,9 +32,10 @@ export class LoginPageComponent {
     }
     this.submitted = true;
 
-    const user:User = {
+    const user:LoginRequest = {
       email: this.form.value.email,
-      password: this.form.value.password
+      password: this.form.value.password,
+      returnSecureToken: true
     };
 
     this.auth.login(user).subscribe(res =>{
